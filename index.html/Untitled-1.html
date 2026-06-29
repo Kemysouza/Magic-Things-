@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Things ✨</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background-color:#fff;
+            color:#333;
+        }
+
+        header{
+            background-color:#ffb6d9;
+            padding:20px;
+            text-align:center;
+        }
+
+        header h1{
+            color:white;
+            font-size:2.5rem;
+        }
+
+        /* CAIXINHA FLUTUANTE (Vertical e Branca) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            min-width: 180px;
+            list-style: none;
+            padding: 10px 0;
+            margin: 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+            border-radius: 0 0 4px 4px;
+            z-index: 1000;
+        }
+
+        .dropdown-content li {
+            display: block;
+            margin: 0;
+        }
+
+        .dropdown-content li a {
+            color: #555555 !important;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+            text-align: left;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .dropdown-content li a:hover {
+            background-color: #f9f9f9;
+            color: #ff69b4 !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        nav{
+            background-color:#ffd6ea;
+            padding:15px;
+            text-align:center;
+        }
+
+        nav a{
+            text-decoration:none;
+            color:#ff4fa3;
+            font-weight:bold;
+            margin:0 15px;
+        }
+
+        nav a:hover {
+            color: #cc0066;
+        }
+
+        /* Barra de navegação horizontal */
+        .barra-navegacao {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .barra-navegacao > li {
+            display: inline-block;
+        }
+
+        .banner{
+            height:400px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background-color:#fff0f7;
+        }
+
+        .banner img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .conteudo{
+            padding:40px;
+            text-align:center;
+        }
+
+        .card{
+            background:white;
+            width:300px;
+            margin:20px auto;
+            padding:20px;
+            border-radius:15px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+        }
+
+        footer{
+            background-color:#ffb6d9;
+            color:white;
+            text-align:center;
+            padding:20px;
+            margin-top:50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Magic Things ✨</h1>
+    </header>
+
+    <nav>
+        <ul class="barra-navegacao">
+            <li class="dropdown">
+                <a href="index.html" class="dropbtn">Home ▾</a>
+                <ul class="dropdown-content">
+                    <li><a href="paginas/roupas.html">Roupas</a></li>
+                    <li><a href="paginas/sapatos.html">Sapatos</a></li>
+                    <li><a href="paginas/cosplays.html">Cosplays</a></li>
+                    <li><a href="paginas/acessorios.html">Acessórios</a></li>
+                    <li><a href="paginas/lar.html">Itens de Decoração/Lar</a></li>
+                    <li><a href="paginas/contato.html">Contato</a></li>
+                </ul>
+            </li>
+            <li><a href="paginas/roupas.html" class="link-menu">Roupas</a></li>
+            <li><a href="paginas/sapatos.html" class="link-menu">Sapatos</a></li>
+            <li><a href="paginas/cosplays.html" class="link-menu">Cosplays</a></li>
+            <li><a href="paginas/acessorios.html" class="link-menu">Acessórios</a></li>
+            <li><a href="paginas/lar.html" class="link-menu">Itens de Decoração/Lar</a></li>
+            <li><a href="paginas/contato.html" class="link-menu">Contato</a></li>
+        </ul>
+    </nav>
+
+    <section class="banner">
+        <img src="imagens/things.png" alt="Magic Things Banner">
+    </section>
+
+    <section class="conteudo">
+        <div class="card">
+            <h3>Bem-vindo!</h3>
+            <p>Explore nossa coleção mágica de produtos exclusivos! ✨</p>
+        </div>
+    </section>
+
+    <footer>
+        © 2026 - Magic Things ✨
+    </footer>
+
+</body>
+</html>

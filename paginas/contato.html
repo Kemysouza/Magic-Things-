@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Magic Things ✨</title>
+    <link rel="stylesheet" href="_nav.css">
+    <style>
+
+        /* ── SEÇÃO DE FOTOS ── */
+        .sobre-mim {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .sobre-mim h2 {
+            color: #ff4fa3;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .sobre-mim .subtitulo {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .fotos-container {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .foto-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 220px;
+        }
+
+        /* MOLDURA CIRCULAR COM BORDA ROSA */
+        .foto-item .moldura {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid #ff4fa3;
+            box-shadow: 0 0 0 4px #ffd6ea, 0 8px 20px rgba(255, 79, 163, 0.25);
+            overflow: hidden;
+            margin-bottom: 18px;
+            background-color: #fff0f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .foto-item .moldura img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Placeholder enquanto não tem foto */
+        .foto-item .moldura .placeholder {
+            font-size: 4rem;
+        }
+
+        .foto-item h3 {
+            color: #ff4fa3;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .foto-item p {
+            color: #888;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* ── DIVISOR ── */
+        .divisor {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #ffb6d9, #ff4fa3);
+            border-radius: 10px;
+            margin: 0 auto 40px;
+        }
+
+        /* ── CARDS DE CONTATO ── */
+        .contato-titulo {
+            text-align: center;
+            color: #ff4fa3;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .contato-subtitulo {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .contatos-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 0 20px 60px;
+        }
+
+        .contato-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border-radius: 18px;
+            padding: 25px 30px;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+            text-decoration: none;
+            color: #333;
+            width: 160px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .contato-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 25px rgba(255, 79, 163, 0.25);
+        }
+
+        .contato-card .icone {
+            font-size: 2.2rem;
+            background-color: #fff0f7;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contato-card span.label {
+            font-size: 0.78rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contato-card strong {
+            color: #ff4fa3;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Magic Things ✨</h1>
+    </header>
+
+    <nav>
+        <ul class="barra-navegacao">
+            <li class="dropdown">
+                <a href="../index.html" class="dropbtn">Home ▾</a>
+                <ul class="dropdown-content">
+                    <li><a href="roupas.html">Roupas</a></li>
+                    <li><a href="sapatos.html">Sapatos</a></li>
+                    <li><a href="cosplays.html">Cosplays</a></li>
+                    <li><a href="acessorios.html">Acessórios</a></li>
+                    <li><a href="lar.html">Itens de Decoração/Lar</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </li>
+            <li><a href="roupas.html" class="link-menu">Roupas</a></li>
+            <li><a href="sapatos.html" class="link-menu">Sapatos</a></li>
+            <li><a href="cosplays.html" class="link-menu">Cosplays</a></li>
+            <li><a href="acessorios.html" class="link-menu">Acessórios</a></li>
+            <li><a href="lar.html" class="link-menu">Itens de Decoração/Lar</a></li>
+            <li><a href="contato.html" class="link-menu">Contato</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── SEÇÃO FOTOS ── -->
+    <section class="sobre-mim">
+        <h2>💖 Quem sou eu?</h2>
+        <p class="subtitulo">Conheça um pouco mais sobre mim</p>
+
+        <div class="fotos-container">
+
+            <!-- FOTO 1 -->
+            <!-- Troque o emoji pelo caminho da sua foto: <img src="../imagens/foto1.jpg" alt="Minha foto"> -->
+            <div class="foto-item">
+                <div class="moldura">
+                     <img src="../imagens/foto para pagina contato.jpeg" alt="Foto 1">
+                </div>
+
+                <h3>A Kemy</h3>
+                <p>Dizem que cada pessoa tem um mundo. O meu sempre foi feito de jogos, desenhos, animes e personagens. Talvez por isso eu fosse chamada de esquisita. 
+                 No fim, descobri que esse "mundinho" nunca foi um lugar para fugir da realidade, mas sim onde minha criatividade ganhou vida.
+                  É aqui que demonstro minha personalidade, ressignificando tudo aquilo que fez parte da minha história e da pessoa que sou hoje.✨</p>
+            </div>
+
+            <!-- FOTO 2 -->
+            <!-- Troque o emoji pelo caminho da sua foto: <img src="../imagens/foto2.jpg" alt="Minha foto"> -->
+            <div class="foto-item">
+                <div class="moldura">
+                    <img src="../imagens\foto cosplay.jpeg" alt="Foto 2"> 
+                </div>
+
+                <h3>Propósito</h3>
+                <p>A criatividade sempre foi a forma como enxergo o mundo. Gosto de transformar ideias, lugares e projetos por onde passo, mas acredito que criar vai muito além da estética.
+                 O bonito chama a atenção, mas é o significado que permanece. Por isso, busco colocar propósito, identidade e responsabilidade em tudo o que faço. 
+                 É aqui que esse propósito ganha continuidade: compartilhando minhas criações para que outras pessoas também possam se reinventar, enxergar novas possibilidades
+                  e ir além daquilo que imaginavam ser capaz. 🎀</p>
+            </div>
+
+             <!-- FOTO 3 -->
+            <!-- Troque o emoji pelo caminho da sua foto: <img src="../imagens/foto2.jpg" alt="Minha foto"> -->
+            <div class="foto-item">
+                <div class="moldura">
+                    <img src="../imagens\frieren.jpg" alt="Foto 3"> 
+                </div>
+
+                <h3>Valor</h3>
+                <p>Entre tantos personagens, Frieren ocupa um lugar especial para mim. Gosto da forma como ela valoriza o tempo, respeita o silêncio e encontra significado nas pequenas coisas.
+                 Ela mostra que nem toda jornada precisa ser apressada; às vezes, é justamente na calma que construímos o conhecimento e as memórias que levaremos para a vida.. 🎀</p>
+            </div>
+
+        </div><!-- fim fotos-container -->
+
+        <div class="divisor"></div>
+
+        <!-- ── CONTATOS ── -->
+        <h3 class="contato-titulo">💌 Me encontre por aqui</h3>
+        <p class="contato-subtitulo">Adoraria conversar com você!</p>
+
+    </section>
+
+    <div class="contatos-grid">
+
+        <!-- Troque o número: 5511999999999 = +55 (11) 99999-9999 -->
+        <a href="https://wa.me/5511999412841" target="_blank" class="contato-card">
+            <div class="icone">📱</div>
+            <span class="label">WhatsApp</span>
+            <strong>(11) 99941-2841</strong>
+        </a>
+
+        <!-- Troque @seuarroba pelo seu Instagram -->
+        <a href="https://instagram.com/kemyy_sz" target="_blank" class="contato-card">
+            <div class="icone">📸</div>
+            <span class="label">Instagram</span>
+            <strong>@kemyy_sz</strong>
+        </a>
+
+        <!-- Troque pelo seu e-mail -->
+        <a href="kemillysouza593@gmail.com" class="contato-card">
+            <div class="icone">✉️</div>
+            <span class="label">E-mail</span>
+            <strong>kemillysouza593@gmail.com</strong>
+        </a>
+
+    </div>
+
+    <footer>
+        © 2026 - Magic Things ✨
+    </footer>
+
+</body>
+</html>

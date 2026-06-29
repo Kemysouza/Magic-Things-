@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roupas - Magic Things ✨</title>
+    <link rel="stylesheet" href="_nav.css">
+    <style>
+
+        .pagina-titulo { padding-top: 40px; }
+
+        /* ── GRID DE CARDS ── */
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 260px);
+            justify-content: center;
+            gap: 30px;
+            padding: 20px 40px 60px;
+        }
+
+        /* ── CARD NOVO (maior, com carrossel) ── */
+        .produto-card {
+            background: white;
+            width: 260px;
+            border-radius: 18px;
+            box-shadow: 0 4px 16px rgba(255,79,163,0.12);
+            text-align: center;
+            padding-bottom: 18px;
+            transition: transform 0.2s;
+            overflow: hidden;
+        }
+
+        .produto-card:hover { transform: translateY(-5px); }
+
+        /* ── CARROSSEL ── */
+        .carrossel {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background-color: #fff0f7;
+            border-radius: 18px 18px 0 0;
+        }
+
+        .carrossel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s ease;
+        }
+
+        .carrossel-track img {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        /* Placeholder quando não há foto */
+        .carrossel-track .slide-placeholder {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            flex-shrink: 0;
+            background-color: #fff0f7;
+        }
+
+        /* Setas do carrossel */
+        .btn-seta {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.85);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: #ff4fa3;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: background 0.2s;
+        }
+
+        .btn-seta:hover { background: #fff; }
+        .btn-seta.esq { left: 6px; }
+        .btn-seta.dir { right: 6px; }
+
+        /* Bolinhas indicadoras */
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 8px 0 4px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ffd6ea;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.2s;
+        }
+
+        .dot.ativo { background: #ff4fa3; }
+
+        /* ── INFO DO CARD ── */
+        .produto-card h3 {
+            color: #ff4fa3;
+            margin: 10px 10px 4px;
+            font-size: 1rem;
+        }
+
+        .produto-card .descricao {
+            color: #888;
+            font-size: 0.82rem;
+            margin: 0 12px 8px;
+            line-height: 1.5;
+        }
+
+        .produto-card .preco {
+            color: #ff4fa3;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ── TAMANHOS ── */
+        .tamanhos-label {
+            font-size: 0.78rem;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        .tamanhos {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tamanho-btn {
+            border: 2px solid #ffd6ea;
+            background: white;
+            color: #ff4fa3;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tamanho-btn:hover,
+        .tamanho-btn.selecionado {
+            background: #ff4fa3;
+            color: white;
+            border-color: #ff4fa3;
+        }
+
+        /* ── BOTÃO INTERESSE ── */
+        .btn-interesse {
+            background: linear-gradient(135deg, #ff4fa3, #ff85c2);
+            color: white;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: bold;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 4px;
+        }
+
+        .btn-interesse:hover {
+            opacity: 0.88;
+            transform: scale(1.04);
+        }
+
+        /* ── MODAL DE PAGAMENTO ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.aberto { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 22px;
+            padding: 36px 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(255,79,163,0.2);
+            position: relative;
+            animation: popIn 0.25s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+
+        .modal-fechar {
+            position: absolute;
+            top: 14px; right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .modal-fechar:hover { color: #ff4fa3; }
+
+        .modal h2 {
+            color: #ff4fa3;
+            margin-bottom: 6px;
+            font-size: 1.4rem;
+        }
+
+        .modal .modal-produto-nome {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .modal .modal-tamanho {
+            color: #ff4fa3;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .modal .modal-preco {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ff4fa3;
+            margin-bottom: 20px;
+        }
+
+        /* Caixa PIX */
+        .pix-box {
+            background: #fff0f7;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .pix-box p {
+            font-size: 0.82rem;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .pix-chave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: white;
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 2px dashed #ffd6ea;
+        }
+
+        .pix-chave span {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .btn-copiar {
+            background: #ff4fa3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-copiar:hover { background: #cc0066; }
+        .btn-copiar.copiado { background: #4caf50; }
+
+        .modal-obs {
+            font-size: 0.8rem;
+            color: #aaa;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .btn-zap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            padding: 10px 22px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn-zap:hover { opacity: 0.88; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Magic Things ✨</h1>
+</header>
+
+<nav>
+    <ul class="barra-navegacao">
+        <li class="dropdown">
+            <a href="../index.html" class="dropbtn">Home ▾</a>
+            <ul class="dropdown-content">
+                <li><a href="roupas.html">Roupas</a></li>
+                <li><a href="sapatos.html">Sapatos</a></li>
+                <li><a href="cosplays.html">Cosplays</a></li>
+                <li><a href="acessorios.html">Acessórios</a></li>
+                <li><a href="lar.html">Itens de Decoração/Lar</a></li>
+                <li><a href="contato.html">Contato</a></li>
+            </ul>
+        </li>
+        <li><a href="roupas.html" class="link-menu">Roupas</a></li>
+        <li><a href="sapatos.html" class="link-menu">Sapatos</a></li>
+        <li><a href="cosplays.html" class="link-menu">Cosplays</a></li>
+        <li><a href="acessorios.html" class="link-menu">Acessórios</a></li>
+        <li><a href="lar.html" class="link-menu">Itens de Decoração/Lar</a></li>
+        <li><a href="contato.html" class="link-menu">Contato</a></li>
+    </ul>
+</nav>
+
+<h2 class="pagina-titulo">👗 Roupas</h2>
+<p class="pagina-subtitulo">Peças únicas e especiais para o seu guarda-roupa</p>
+
+<div class="produtos-grid">
+
+    <!-- ══════════════════════════════
+         CARD 1 — VESTIDO ROXO GOTICO
+         ══════════════════════════════ -->
+    <div class="produto-card">
+        <div class="carrossel" id="car-1">
+            <div class="carrossel-track">
+                <img src="../imagens\vestido curto roxo frente.jpeg" alt="Foto 1"> 
+                <img src="../imagens\vestido curto roxo de perto.jpeg" alt="Foto 2"> 
+                <img src="../imagens\vestido curto roxo geral.jpeg" alt="Foto 3"> 
+            </div>
+            <button class="btn-seta esq" onclick="moverCarrossel('car-1', -1)">&#8249;</button>
+            <button class="btn-seta dir" onclick="moverCarrossel('car-1',  1)">&#8250;</button>
+        </div>
+        <div class="dots" id="dots-car-1"></div>
+        <h3>Vestido de Veludo roxo - Gótico</h3>
+        <p class="descricao">Vestido curto de veludo roxo de renda com uma cruz no meio  - TAM P (Peça única)</p>
+        <span class="preco">R$ 50,00</span>
+        <p class="tamanhos-label">Tamanho:</p>
+        <div class="tamanhos">
+            <button class="tamanho-btn" onclick="selecionarTamanho(this)">P</button>
+        </div>
+        <button class="btn-interesse" onclick="abrirModal('Vestido curto veludo roxo', 'R$ 50,00', this)">
+            Tenho interesse 💖
+        </button>
+    </div>
+
+    <!-- ══════════════════════════════
+         CARD 2 - VESTIDO TUBINHO COM SHORTINHO
+         ══════════════════════════════ -->
+    <div class="produto-card">
+        <div class="carrossel" id="car-2">
+            <div class="carrossel-track">
+                <img src="../imagens\vestido tubinho frente.jpeg" alt="Foto 1"> 
+                <img src="../imagens\vestido tubinho costas.jpeg" alt="Foto 2"> 
+                <img src="../imagens\vestido tubinho shortinho.jpeg" alt="Foto 3"> 
+            </div>
+            <button class="btn-seta esq" onclick="moverCarrossel('car-2', -1)">&#8249;</button>
+            <button class="btn-seta dir" onclick="moverCarrossel('car-2',  1)">&#8250;</button>
+        </div>
+        <div class="dots" id="dots-car-2"></div>
+        <h3>Vestido tubinho curto com estampa de cruz Y2K - Grunge Punk</h3>
+        <p class="descricao">Vestido tubinho curto com estampa de cruz Y2K e acompanha shortinho por baixo (TAM P)</p>
+        <span class="preco">R$ 35,00</span>
+        <p class="tamanhos-label">Tamanho:</p>
+        <div class="tamanhos">
+            <button class="tamanho-btn" onclick="selecionarTamanho(this)">P</button>
+        </div>
+        <button class="btn-interesse" onclick="abrirModal('Vestido tubinho curto com estampa de cruz Y2K - Grunge Punk (TAM P) ', 'R$ 35,00', this)">
+            Tenho interesse 💖
+        </button>
+    </div>
+
+    <!-- ══════════════════════════════
+         CARD 3 -  VESTIDO TOMARA Q CAIA
+         ══════════════════════════════ -->
+    <div class="produto-card">
+        <div class="carrossel" id="car-3">
+            <div class="carrossel-track">
+                <img src="../imagens\vestido tomara q caia.jpeg" alt="Foto 1">
+                <img src="../imagens\vestido tomara q caia costas.jpeg" alt="Foto 2"> 
+                <img src="../imagens\say cat tomara q caia.jpeg" alt="Foto 3"> 
+                <img src="../imagens\say cat tomara q caia costas.jpeg" alt="Foto 4"> 
+            </div>
+            <button class="btn-seta esq" onclick="moverCarrossel('car-3', -1)">&#8249;</button>
+            <button class="btn-seta dir" onclick="moverCarrossel('car-3',  1)">&#8250;</button>
+        </div>
+        <div class="dots" id="dots-car-3"></div>
+        <h3>Vestido curto tomara que caia com laço - Dorama</h3>
+        <p class="descricao">Vestido curto tomara que caia com laço no meio, perfeito para festas ou casamentos - Dorama (TAM P) </p>
+        <span class="preco">R$ 65,00</span>
+        <p class="tamanhos-label">Tamanho:</p>
+        <div class="tamanhos">
+            <button class="tamanho-btn" onclick="selecionarTamanho(this)">P</button>
+        </div>
+        <button class="btn-interesse" onclick="abrirModal('Vestido curto tomara que caia com laço', 'R$ 65,00', this)">
+            Tenho interesse 💖
+        </button>
+    </div>
+
+    <!-- ══════════════════════════════
+         CARD 4 - VESTIDO CLASSICO
+         ══════════════════════════════ -->
+    <div class="produto-card">
+        <div class="carrossel" id="car-4">
+            <div class="carrossel-track">
+                <<img src="../imagens\vestido curto classico.jpeg" alt="Foto 1"> 
+                <img src="../imagens\vestido curto classico costas.jpeg" alt="Foto 2"> 
+                 <img src="../imagens\vestido curto classico info.jpeg" alt="Foto 3"> 
+            </div>
+            <button class="btn-seta esq" onclick="moverCarrossel('car-4', -1)">&#8249;</button>
+            <button class="btn-seta dir" onclick="moverCarrossel('car-4',  1)">&#8250;</button>
+        </div>
+        <div class="dots" id="dots-car-4"></div>
+        <h3>Vestido Clássico curto preto leve - Verão</h3>
+        <p class="descricao">Vestido de malha com mangas curtas, decote, detalhe de amarração na frente, leve - perfeito para verão (TAM P)</p>
+        <span class="preco">R$ 30,00</span>
+        <p class="tamanhos-label">Tamanho:</p>
+        <div class="tamanhos">
+            <button class="tamanho-btn" onclick="selecionarTamanho(this)">P</button>
+          
+        </div>
+        <button class="btn-interesse" onclick="abrirModal('Vestido Clássico', 'R$ 30,00', this)">
+            Tenho interesse 💖
+        </button>
+    </div>
+
+
+
+
+
+
+<!-- ══════════════════════════════
+         CARD 5 - VESTIDO xadrez
+         ══════════════════════════════ -->
+    <div class="produto-card">
+        <div class="carrossel" id="car-5">
+            <div class="carrossel-track">
+                <<img src="../imagens\vestido xadrez frente.jpeg" alt="Foto 1"> 
+                <img src="../imagens\vestido xadrez modelo.29.57.jpeg" alt="Foto 2"> 
+                 <img src="../imagens\vestido xadrez.jpeg" alt="Foto 3"> 
+            </div>
+            <button class="btn-seta esq" onclick="moverCarrossel('car-5', -1)">&#8249;</button>
+            <button class="btn-seta dir" onclick="moverCarrossel('car-5',  1)">&#8250;</button>
+        </div>
+        <div class="dots" id="dots-car-4"></div>
+        <h3>Vestido curto xadrez vermelho com correntinha</h3>
+        <p class="descricao">Vestido curto vermelho com correntinha prata escura plissado com ziper no meio - alt (TAM P)</p>
+        <span class="preco">R$ 45,00</span>
+        <p class="tamanhos-label">Tamanho:</p>
+        <div class="tamanhos">
+            <button class="tamanho-btn" onclick="selecionarTamanho(this)">P</button>
+          
+        </div>
+        <button class="btn-interesse" onclick="abrirModal('Vestido xadrez vermelho', 'R$ 45,00', this)">
+            Tenho interesse 💖
+        </button>
+    </div>
+
+
+<!-- ══════════════════════════════
+         CARD 5 - CAMISETA VERMELHA COM CINTOS NO MEIO 
+         ══════════════════════════════ -->
+
+ <div class="produto-card">
+        <div class="carrossel" id="car-6">
+            <div class="carrossel-track">
+                <<img src="../imagens\camiseta vermelha frente.jpeg" alt="Foto 1"> 
+                <img src="../imagens\camiseta vermelha.jpeg" alt="Foto 2"> 
+                 <img src="../imagens\camiseta vermelha atras.jpeg" alt="Foto 3"> 
+                 <img src="../imagens\camiseta vermelha detalhe.jpeg" alt="Foto 4"> 
+            </div>
+            <button class="btn-seta esq" onclick="moverCarrossel('car-6', -1)">&#8249;</button>
+            <button class="btn-seta dir" onclick="moverCarrossel('car-6',  1)">&#8250;</button>
+        </div>
+        <div class="dots" id="dots-car-4"></div>
+        <h3>Camiseta vermelha com cintos e rendas </h3>
+        <p class="descricao">Camiseta vermelha com cintos no meio e rendas, possui bojo e alça de regulagem (com avaria) - perfeito para roles alt (TAM M)</p>
+        <span class="preco">R$ 25,00</span>
+        <p class="tamanhos-label">Tamanho:</p>
+        <div class="tamanhos">
+            <button class="tamanho-btn" onclick="selecionarTamanho(this)">M</button>
+          
+        </div>
+        <button class="btn-interesse" onclick="abrirModal('Camiseta vermelha', 'R$ 25,00', this)">
+            Tenho interesse 💖
+        </button>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- fim produtos-grid -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ══════════════════════════════
+     MODAL DE PAGAMENTO VIA PIX
+     ══════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="fecharModalFora(event)">
+    <div class="modal">
+        <button class="modal-fechar" onclick="fecharModal()">✕</button>
+        <h2>💸 Pagamento via PIX</h2>
+        <p class="modal-produto-nome" id="modal-nome"></p>
+        <p class="modal-tamanho" id="modal-tamanho"></p>
+        <p class="modal-preco" id="modal-preco"></p>
+
+        <div class="pix-box">
+            <p>Chave PIX (CPF / E-mail / Telefone):</p>
+            <div class="pix-chave">
+                <!-- 🔑 COLOQUE SUA CHAVE PIX AQUI -->
+                <span id="chave-pix">seuchave@pix.com</span>
+                <button class="btn-copiar" id="btn-copiar" onclick="copiarPix()">Copiar</button>
+            </div>
+        </div>
+
+        <p class="modal-obs">
+            Após realizar o PIX, envie o comprovante pelo WhatsApp para confirmar seu pedido. 🎀
+        </p>
+
+        <!-- 🔗 COLOQUE SEU NÚMERO DO WHATSAPP ABAIXO -->
+        <a class="btn-zap" id="btn-zap-modal" href="#" target="_blank">
+            📱 Enviar comprovante no WhatsApp
+        </a>
+    </div>
+</div>
+
+
+<footer>
+    © 2026 - Magic Things ✨
+</footer>
+
+
+<script>
+    // ─── NÚMERO DO WHATSAPP (apenas números, com DDI) ───
+    const WHATSAPP = '5511999412841'; // ← troque pelo seu número
+
+    // ─── CARROSSEIS ───
+    const estados = {};
+
+    function iniciarCarrosseis() {
+        document.querySelectorAll('.carrossel').forEach(car => {
+            const id = car.id;
+            const slides = car.querySelectorAll('.carrossel-track > *');
+            estados[id] = { atual: 0, total: slides.length };
+            criarDots(id, slides.length);
+            atualizarDots(id);
+        });
+    }
+
+    function criarDots(id, total) {
+        const container = document.getElementById('dots-' + id);
+        if (!container) return;
+        container.innerHTML = '';
+        for (let i = 0; i < total; i++) {
+            const d = document.createElement('button');
+            d.className = 'dot' + (i === 0 ? ' ativo' : '');
+            d.onclick = () => irParaSlide(id, i);
+            container.appendChild(d);
+        }
+    }
+
+    function moverCarrossel(id, direcao) {
+        const e = estados[id];
+        e.atual = (e.atual + direcao + e.total) % e.total;
+        aplicarSlide(id);
+    }
+
+    function irParaSlide(id, index) {
+        estados[id].atual = index;
+        aplicarSlide(id);
+    }
+
+    function aplicarSlide(id) {
+        const car = document.getElementById(id);
+        const track = car.querySelector('.carrossel-track');
+        track.style.transform = `translateX(-${estados[id].atual * 100}%)`;
+        atualizarDots(id);
+    }
+
+    function atualizarDots(id) {
+        const dots = document.querySelectorAll('#dots-' + id + ' .dot');
+        dots.forEach((d, i) => d.classList.toggle('ativo', i === estados[id].atual));
+    }
+
+    // ─── TAMANHOS ───
+    function selecionarTamanho(btn) {
+        const grupo = btn.closest('.tamanhos');
+        grupo.querySelectorAll('.tamanho-btn').forEach(b => b.classList.remove('selecionado'));
+        btn.classList.add('selecionado');
+    }
+
+    // ─── MODAL ───
+    function abrirModal(nome, preco, btnClicado) {
+        const card = btnClicado.closest('.produto-card');
+        const selecionado = card.querySelector('.tamanho-btn.selecionado');
+
+        if (!selecionado) {
+            alert('Por favor, selecione um tamanho antes de continuar! 💖');
+            return;
+        }
+
+        const tamanho = selecionado.textContent;
+        document.getElementById('modal-nome').textContent = nome;
+        document.getElementById('modal-tamanho').textContent = 'Tamanho: ' + tamanho;
+        document.getElementById('modal-preco').textContent = preco;
+
+        // Monta mensagem do WhatsApp
+        const msg = encodeURIComponent(
+            `Olá! Tenho interesse na peça:\n*${nome}* - Tamanho ${tamanho}\nValor: ${preco}\n\nVou enviar o comprovante do PIX! 💖`
+        );
+        document.getElementById('btn-zap-modal').href = `https://wa.me/${WHATSAPP}?text=${msg}`;
+
+        // Resetar botão copiar
+        const btnCopiar = document.getElementById('btn-copiar');
+        btnCopiar.textContent = 'Copiar';
+        btnCopiar.classList.remove('copiado');
+
+        document.getElementById('modal-overlay').classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-overlay').classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    function fecharModalFora(e) {
+        if (e.target === document.getElementById('modal-overlay')) fecharModal();
+    }
+
+    function copiarPix() {
+        const chave = document.getElementById('chave-pix').textContent;
+        navigator.clipboard.writeText(chave).then(() => {
+            const btn = document.getElementById('btn-copiar');
+            btn.textContent = 'Copiado ✓';
+            btn.classList.add('copiado');
+            setTimeout(() => {
+                btn.textContent = 'Copiar';
+                btn.classList.remove('copiado');
+            }, 2500);
+        });
+    }
+
+    // Iniciar tudo
+    iniciarCarrosseis();
+</script>
+
+</body>
+</html>
